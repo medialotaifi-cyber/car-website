@@ -1,0 +1,656 @@
+<!DOCTYPE html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CAR — Explore Cars</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #08090b;
+            color: gray;
+        }
+
+        /* NAVBAR */
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 20px 7%;
+
+            background: rgba(8, 9, 11, 0.75);
+            backdrop-filter: blur(15px);
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: #ff3b30;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+        }
+
+        nav a {
+            color: #ddd;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.9s;
+        }
+
+        nav a:hover {
+            color: #ff3b30;
+        }
+
+        .nav-button {
+            padding: 11px 20px;
+            border: 1px solid #333;
+            border-radius: 30px;
+            text-decoration: none;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .nav-button:hover {
+            background: white;
+            color: black;
+        }
+
+        /* HERO */
+
+        .hero {
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+
+            padding: 120px 7% 70px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(8,9,11,1) 0%,
+                    rgba(8,9,11,0.7) 45%,
+                    rgba(8,9,11,0.15) 100%
+                ),
+                url("https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=2000&q=90");
+
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-content {
+            max-width: 650px;
+        }
+
+        .hero-small {
+            color: #ff3b30;
+            font-weight: bold;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(55px, 8vw, 110px);
+            line-height: 0.9;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        .hero h1 span {
+            color: #ff3b30;
+        }
+
+        .hero p {
+            color: #aaa;
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 550px;
+            margin-bottom: 35px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 15px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .primary {
+            background: #ff3b30;
+            color: white;
+        }
+
+        .primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(255,59,48,0.3);
+        }
+
+        .secondary {
+            border: 1px solid #444;
+            color: white;
+        }
+
+        .secondary:hover {
+            background: white;
+            color: black;
+        }
+
+        /* SECTIONS */
+
+        section {
+            padding: 100px 7%;
+        }
+
+        .section-title {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .section-subtitle {
+            color: #888;
+            margin-bottom: 45px;
+        }
+
+        /* SEARCH */
+
+        .search-box {
+            display: flex;
+            max-width: 700px;
+            margin-bottom: 50px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 18px 20px;
+            border: 1px solid #333;
+            background: #111216;
+            color: white;
+            border-radius: 12px 0 0 12px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .search-box button {
+            border: none;
+            background: #ff3b30;
+            color: white;
+            padding: 0 30px;
+            border-radius: 0 12px 12px 0;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* CARS */
+
+        .cars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .car-card {
+            background: #111216;
+            border: 1px solid #202126;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: 0.4s;
+        }
+
+        .car-card:hover {
+            transform: translateY(-10px);
+            border-color: #ff3b30;
+        }
+
+        .car-image {
+            height: 220px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .car-info {
+            padding: 22px;
+        }
+
+        .car-info h3 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .car-info p {
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .specs {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #292929;
+            padding-top: 18px;
+        }
+
+        .spec {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .spec small {
+            color: #666;
+        }
+
+        .spec strong {
+            font-size: 14px;
+        }
+
+        /* CATEGORIES */
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .category {
+            padding: 30px 20px;
+            border: 1px solid #25262b;
+            background: #101114;
+            border-radius: 15px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .category:hover {
+            background: #ff3b30;
+            transform: translateY(-5px);
+        }
+
+        .category h3 {
+            margin-bottom: 8px;
+        }
+
+        .category p {
+            color: #888;
+            font-size: 13px;
+        }
+
+        .category:hover p {
+            color: white;
+        }
+
+        /* FOOTER */
+
+        footer {
+            padding: 50px 7%;
+            border-top: 1px solid #222;
+            color: #666;
+            text-align: center;
+        }
+
+        footer strong {
+            color: white;
+        }
+
+        @media (max-width: 700px) {
+
+            nav ul {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 60px;
+            }
+
+            .hero {
+                background-position: 65% center;
+            }
+
+            .search-box {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .search-box input,
+            .search-box button {
+                border-radius: 10px;
+                height: 55px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+
+    <nav>
+
+        <div class="logo">
+            CAR<span>HUB</span>
+        </div>
+
+        <ul>
+            <li><a href="#cars">Cars</a></li>
+            <li><a href="#categories">Categories</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+
+        <a href="#cars" class="nav-button">
+            Explore
+        </a>
+
+    </nav>
+
+
+    <!-- HERO -->
+
+    <header class="hero">
+
+        <div class="hero-content">
+
+            <div class="hero-small">
+                THE WORLD OF CARS
+            </div>
+
+            <h1>
+                FIND YOUR<br>
+                <span>PERFECT</span><br>
+                MACHINE.
+            </h1>
+
+            <p>
+                Discover legendary cars, explore their specifications,
+                compare performance and learn everything about the machines
+                you love.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="#cars" class="btn primary">
+                    Explore Cars →
+                </a>
+
+                <a href="#categories" class="btn secondary">
+                    Browse Categories
+                </a>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- CARS -->
+
+    <section id="cars">
+
+        <h2 class="section-title">
+            Explore Cars
+        </h2>
+
+        <p class="section-subtitle">
+            Discover some of the world's most iconic machines.
+        </p>
+
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                placeholder="Search a car, brand or model..."
+            >
+
+            <button>
+                SEARCH
+            </button>
+
+        </div>
+
+
+        <div class="cars-grid">
+
+
+            <!-- CAR 1 -->
+
+            <article class="car-card">
+
+                <div
+                    class="car-image"
+                    style="
+                    background-image:
+                    url('https://images.unsplash.com/photo-1544829099-b9a0c07fad1a?auto=format&fit=crop&w=1000&q=80');
+                    ">
+                </div>
+
+                <div class="car-info">
+
+                    <h3>LAMBORGHINI AVENTADOR</h3>
+
+                    <p>italian performance icon</p>
+
+                    <div class="specs">
+
+                        <div class="spec">
+                            <small>POWER</small>
+                            <strong>690 HP</strong>
+                        </div>
+
+                        <div class="spec">
+                            <small>0–100</small>
+                            <strong>2.9s</strong>
+                        </div>
+
+                        <div class="spec">
+                            <small>TOP SPEED</small>
+                            <strong>350 KM/H</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- CAR 2 -->
+
+            <article class="car-card">
+
+                <div
+                    class="car-image"
+                    style="
+                    background-image:
+                    url('https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=1000&q=80');
+                    ">
+                </div>
+
+                <div class="car-info">
+
+                    <h3>AMG GT 63</h3>
+
+                    <p>German performance coupe</p>
+
+                    <div class="specs">
+
+                        <div class="spec">
+                            <small>POWER</small>
+                            <strong>816 HP</strong>
+                        </div>
+
+                        <div class="spec">
+                            <small>0–100</small>
+                            <strong>2.8s</strong>
+                        </div>
+
+                        <div class="spec">
+                            <small>TOP SPEED</small>
+                            <strong>320 KM/H</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- CAR 3 -->
+
+            <article class="car-card">
+
+                <div
+                    class="car-image"
+                    style="
+                    background-image:
+                    url('https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=1000&q=80');
+                    ">
+                </div>
+
+                <div class="car-info">
+
+                    <h3>BUGATTI</h3>
+
+                    <p>french supercar engineering</p>
+
+                    <div class="specs">
+
+                        <div class="spec">
+                            <small>POWER</small>
+                            <strong>1500 HP</strong>
+                        </div>
+
+                        <div class="spec">
+                            <small>0–100</small>
+                            <strong>2.4s</strong>
+                        </div>
+
+                        <div class="spec">
+                            <small>TOP SPEED</small>
+                            <strong>420 KM/H</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- CATEGORIES -->
+
+    <section id="categories">
+
+        <h2 class="section-title">
+            Choose Your World
+        </h2>
+
+        <p class="section-subtitle">
+            What kind of machines are you into?
+        </p>
+
+
+        <div class="categories">
+
+            <div class="category">
+                <h3>🏎️ Supercars</h3>
+                <p>Extreme performance</p>
+            </div>
+
+            <div class="category">
+                <h3>🇯🇵 JDM</h3>
+                <p>Japanese legends</p>
+            </div>
+
+            <div class="category">
+                <h3>💪 Muscle</h3>
+                <p>American power</p>
+            </div>
+
+            <div class="category">
+                <h3>✨ Luxury</h3>
+                <p>Comfort & prestige</p>
+            </div>
+
+            <div class="category">
+                <h3>🚙 SUVs</h3>
+                <p>Power meets practicality</p>
+            </div>
+
+            <div class="category">
+                <h3>⚡ EV</h3>
+                <p>The electric future</p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ABOUT -->
+
+    <section id="about">
+
+        <h2 class="section-title">
+            Built For Car People.
+        </h2>
+
+        <p class="section-subtitle">
+            CARHUB is designed to make discovering cars simple,
+            exciting and addictive.
+        </p>
+
+    </section>
+
+
+    <footer>
+
+        <strong>CARHUB</strong>
+
+        <br><br>
+
+        Explore. Compare. Discover.
+
+        <br><br>
+
+        © 2026 CARHUB
+
+    </footer>
+
